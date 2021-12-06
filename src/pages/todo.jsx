@@ -48,6 +48,7 @@ const Todo = () => {
                 deleted: false
             })
         }
+        document.title = `TO-DOs - Created: ${newTask}`
         setNewTask('')
     }
     function completeTask(id) {
