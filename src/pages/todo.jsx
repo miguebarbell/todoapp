@@ -91,7 +91,7 @@ const Todo = () => {
 
         <Container>
             <NewTaskContainer>
-                <span>Total: {Tasks.length}</span>
+                <span>Total: {Tasks.filter(undel => !undel.deleted).length}</span>
                 <form onSubmit={addTask}>
                     <Input value={newTask} onChange={handleTaskChange} placeholder="new task"/>
                     <Button type="submit">Add</Button>
