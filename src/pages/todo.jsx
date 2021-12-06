@@ -31,13 +31,16 @@ const Task = styled.h3``;
 const Input = styled.input``;
 const Button = styled.button``;
 const Todo = () => {
+    let Tasks = []
+    let [stat, setStat] = useState(0)
+    // let [Tasks, setTasks] = useState([])
     // let [Tasks, setTasks] = useState([])
     const [newTask, setNewTask] = useState('')
     useEffect(() => {
+        // setTasks(Tasks)
 
         //save it to localstorage
-    }, [newTask])
-// }, [newTask, Tasks])
+    }, [newTask, stat])
     const addTask = (event) => {
         event.preventDefault();
         // add the new task to the array and clean the input
@@ -77,18 +80,15 @@ const Todo = () => {
         return JSON.parse(localStorage.getItem(id))
     }
     function updateLocalStorage() {
-        console.log('Updating localStorage')
-        console.log(Tasks)
+        // console.log('Updating localStorage')
         for (let i=0; i <= Tasks.length; i++) {
             if (Tasks[i]) {
                 localStorage.setItem(`todoappid${Tasks[i].id}`, JSON.stringify(Tasks[i]))
-                // console.log(localStorage.getItem(`todoappid${Tasks[i].id}`))
             }
         }
+        setStat(Tasks)
     }
-    let Tasks = []
     for (let j = 1; j <= localStorage.length; j++ ) {
-        console.log(destructureLocalObject(`todoappid${j}`))
         if (destructureLocalObject(`todoappid${j}`) !== null) {
             Tasks.push(destructureLocalObject(`todoappid${j}`))
         }
