@@ -1,7 +1,9 @@
+import Todo from "./pages/todo";
+
 function App() {
   return (
     <div>
-      clean start
+      <Todo/>
     </div>
   );
 }
