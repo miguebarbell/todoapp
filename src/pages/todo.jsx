@@ -31,73 +31,79 @@ const Task = styled.h3``;
 const Input = styled.input``;
 const Button = styled.button``;
 const Todo = () => {
-    const [Tasks, setTasks] = useState([])
+    // let [Tasks, setTasks] = useState([])
     const [newTask, setNewTask] = useState('')
     useEffect(() => {
 
         //save it to localstorage
-    }, [newTask, Tasks])
+    }, [newTask])
+// }, [newTask, Tasks])
     const addTask = (event) => {
         event.preventDefault();
         // add the new task to the array and clean the input
         if (newTask !== '') {
-            Tasks.push({
-                id: Tasks.length + 1,
+            const taskObject = {
+                id: localStorage.length + 1,
                 title: newTask,
                 completed: false,
                 deleted: false
-            })
+            }
+            localStorage.setItem(`todoappid${localStorage.length + 1}`, JSON.stringify(taskObject))
         }
         document.title = `TO-DOs - Created: ${newTask}`
         setNewTask('')
+        updateLocalStorage()
     }
     function completeTask(id) {
-        const NewTasks = Tasks.map(x => x)
-        const completed = NewTasks.find(task => task.id === id)
+        const completed = Tasks.find(task => task.id === id)
         completed.completed = !completed.completed
         document.title = completed.completed ? `TO-DOs - Completed: ${completed.title}` : `TO-DOs - Redoing: ${completed.title}`
-        setTasks(NewTasks)
+        updateLocalStorage()
 
     }
     function deleteTask(id) {
-        const NewTasks = Tasks.map(x => x)
-        const deleted = NewTasks.find(task => task.id === id)
+        const deleted = Tasks.find(task => task.id === id)
         document.title = `TO-DOs - Deleted: ${deleted.title}`
         deleted.title = 'deleted'
         deleted.deleted = true
-        setTasks(NewTasks)
-
+        updateLocalStorage()
     }
     const handleTaskChange = event => {
         setNewTask(event.target.value);
         // make the title dynamic
         document.title = newTask === '' ? 'TO-DOs App' : `TO-DOs - New Task: ${newTask}`
     }
-//     const tasks = [
-//         {
-//             id: 1,
-//             title: 'code',
-//             status: true
-//
-//         },
-//         {
-//             id: 2,
-//             title: 'sleep',
-//             status: true
-//
-//         },
-// ]
+    function destructureLocalObject (id) {
+        return JSON.parse(localStorage.getItem(id))
+    }
+    function updateLocalStorage() {
+        console.log('Updating localStorage')
+        console.log(Tasks)
+        for (let i=0; i <= Tasks.length; i++) {
+            if (Tasks[i]) {
+                localStorage.setItem(`todoappid${Tasks[i].id}`, JSON.stringify(Tasks[i]))
+                // console.log(localStorage.getItem(`todoappid${Tasks[i].id}`))
+            }
+        }
+    }
+    let Tasks = []
+    for (let j = 1; j <= localStorage.length; j++ ) {
+        console.log(destructureLocalObject(`todoappid${j}`))
+        if (destructureLocalObject(`todoappid${j}`) !== null) {
+            Tasks.push(destructureLocalObject(`todoappid${j}`))
+        }
+    }
     return (
-
         <Container>
             <NewTaskContainer>
-                <span>Total: {Tasks.filter(undel => !undel.deleted).length}</span>
+                <span>Total: {Tasks.filter(unDel => !unDel.deleted).length}</span>
                 <form onSubmit={addTask}>
                     <Input value={newTask} onChange={handleTaskChange} placeholder="new task"/>
                     <Button type="submit">Add</Button>
                 </form>
             </NewTaskContainer>
             <TasksContainer>
+
                 {Tasks.filter(task => task.deleted === false).map(task =>
                     <TaskContainer key={task.id} status={task.completed}>
                         <Button onClick={() => {completeTask(task.id)}}>{task.completed ? 'reDo' : 'Done'}</Button>
