@@ -1,6 +1,7 @@
 import styled from "styled-components";
-import {useEffect, useState} from "react";
-
+import { useEffect, useState } from "react";
+import { FaPlusCircle} from "react-icons/fa";
+import {AiFillDelete} from "react-icons/ai";
 const Container = styled.div`
 display:flex;
 align-items:center;
@@ -21,15 +22,28 @@ const TaskContainer = styled.div`
 font-weight: ${props => props.status === false ? 'bold' : 'normal'};
 text-decoration: ${props => props.status === false ? 'none' : 'line-through'};
 color: ${props => props.status === false ? 'black' : 'white'};
-border: 1px solid black;
+// border: 1px solid black;
+border-radius: 10px;
 width: 400px;
 margin: 0.5rem;
 padding: 1rem;
 background-color: ${props => props.status === false ? 'rgba(20, 100, 20, 0.8)' : 'rgba(100,0,255,.5)'};
 `;
 const Task = styled.h3``;
-const Input = styled.input``;
-const Button = styled.button``;
+const Input = styled.input`
+border: 0;`;
+const Button = styled.button`
+font-weight: bold;
+background-color: transparent;
+border: 0;
+padding:0;
+margin: 0;
+color: black;
+cursor: pointer;
+&:hover {
+color: blue;
+}
+`;
 const Todo = () => {
     let Tasks = []
     let [stat, setStat] = useState(0)
@@ -99,15 +113,15 @@ const Todo = () => {
                 <span>Total: {Tasks.filter(unDel => !unDel.deleted).length}</span>
                 <form onSubmit={addTask}>
                     <Input value={newTask} onChange={handleTaskChange} placeholder="new task"/>
-                    <Button type="submit">Add</Button>
+                    <Button type="submit"><FaPlusCircle/></Button>
                 </form>
             </NewTaskContainer>
             <TasksContainer>
 
                 {Tasks.filter(task => task.deleted === false).map(task =>
                     <TaskContainer key={task.id} status={task.completed}>
-                        <Button onClick={() => {completeTask(task.id)}}>{task.completed ? 'reDo' : 'Done'}</Button>
-                        <Button onClick={() => {deleteTask(task.id)}}>Delete</Button>
+                        <Button onClick={() => {completeTask(task.id)}}>{task.completed ? 'reDo?' : 'Done?'}</Button>
+                        <Button onClick={() => {deleteTask(task.id)}}><AiFillDelete/></Button>
                         <Task>{task.title}</Task>
                     </TaskContainer>
                 )}
