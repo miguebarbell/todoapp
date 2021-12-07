@@ -11,6 +11,8 @@ flex-direction: column;
 `;
 const NewTaskContainer = styled.div`
 display:flex;
+justify-content: space-between;
+width: 400px;
 `
 const TasksContainer = styled.div`
 position: relative;
@@ -18,9 +20,13 @@ display: flex;
 align-items: center;
 justify-content: center;
 flex-wrap: wrap;`;
+const HeaderTaskContainer = styled.div`
+display:flex;
+justify-content: space-between;
+width: 100%;
+`
 const TaskContainer = styled.div`
 font-weight: ${props => props.status === false ? 'bold' : 'normal'};
-text-decoration: ${props => props.status === false ? 'none' : 'line-through'};
 color: ${props => props.status === false ? 'black' : 'white'};
 // border: 1px solid black;
 border-radius: 10px;
@@ -28,11 +34,16 @@ width: 400px;
 margin: 0.5rem;
 padding: 1rem;
 background-color: ${props => props.status === false ? 'rgba(20, 100, 20, 0.8)' : 'rgba(100,0,255,.5)'};
+display:flex;
+flex-direction: column;
 `;
-const Task = styled.h3``;
+const Task = styled.h3`
+text-decoration: ${props => props.status === false ? 'none' : 'line-through'};
+`;
 const Input = styled.input`
 border: 0;`;
 const Button = styled.button`
+text-decoration: !none;
 font-weight: bold;
 background-color: transparent;
 border: 0;
@@ -111,18 +122,20 @@ const Todo = () => {
         <Container>
             <NewTaskContainer>
                 <span>Total: {Tasks.filter(unDel => !unDel.deleted).length}</span>
-                <form onSubmit={addTask}>
-                    <Input value={newTask} onChange={handleTaskChange} placeholder="new task"/>
-                    <Button type="submit"><FaPlusCircle/></Button>
+                <form onSubmit={addTask} >
+                    <Input style={{margin: '0 0.25rem'}} value={newTask} onChange={handleTaskChange} placeholder="new task"/>
+                    <Button style={{margin: '0 0.25rem'}} type="submit"><FaPlusCircle/></Button>
                 </form>
             </NewTaskContainer>
             <TasksContainer>
 
                 {Tasks.filter(task => task.deleted === false).map(task =>
                     <TaskContainer key={task.id} status={task.completed}>
-                        <Button onClick={() => {completeTask(task.id)}}>{task.completed ? 'reDo?' : 'Done?'}</Button>
-                        <Button onClick={() => {deleteTask(task.id)}}><AiFillDelete/></Button>
-                        <Task>{task.title}</Task>
+                        <HeaderTaskContainer>
+                            <Button onClick={() => {completeTask(task.id)}}>{task.completed ? 'reDo?' : 'Done?'}</Button>
+                            <Button onClick={() => {deleteTask(task.id)}}><AiFillDelete/></Button>
+                        </HeaderTaskContainer>
+                        <Task status={task.completed}>{task.title}</Task>
                     </TaskContainer>
                 )}
             </TasksContainer>
